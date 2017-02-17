@@ -107,7 +107,6 @@ class PDFMerger {
 
     /**
      * Save the merged PDF content to the filesystem
-     * @param mixed $filePath
      *
      * @return string
      */
@@ -135,7 +134,15 @@ class PDFMerger {
         return $this;
     }
 
-    public function addString($string, $fileName, $pages = 'all', $orientation = null){
+    /**
+     * Set the final filename
+     * @param string $string
+     * @param mixed $pages
+     * @param mixed $orientation
+     *
+     * @return string
+     */
+    public function addString($string, $pages = 'all', $orientation = null){
 
         $filePath = storage_path('tmp/'.str_random(16).'.pdf');
         $this->oFilesystem->put($filePath, $string);
@@ -190,8 +197,8 @@ class PDFMerger {
 
         $this->aFiles->each(function($file) use($oFPDI, $orientation){
             $file['orientation'] = !is_null($file['orientation'])?$orientation:$file['orientation'];
+            $count = $oFPDI->setSourceFile($file['name']);
             if ($file['pages'] == 'all') {
-                $count = $oFPDI->setSourceFile($file['name']);
 
                 for ($i = 1; $i <= $count; $i++) {
                     $template   = $oFPDI->importPage($i);
