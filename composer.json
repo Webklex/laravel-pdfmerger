@@ -20,7 +20,7 @@
     ],
     "require": {
         "php": ">=5.5.9",
-        "illuminate/support": "~5.2",
+        "illuminate/support": ">=5.0",
         "itbz/fpdi": "^1.6"
     },
     "require-dev": {
