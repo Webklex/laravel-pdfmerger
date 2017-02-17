@@ -38,8 +38,8 @@ use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
 
 $oMerger = PDFMerger::init();
 
-$oMerger->addPDF('/path/to/project/vendors/webklex/PDFMerger/src/PDFMerger/examples/pdf_one.pdf', [2]);
-$oMerger->addPDF('/path/to/project/vendors/webklex/PDFMerger/src/PDFMerger/examples/pdf_two.pdf', 'all');
+$oMerger->addPDF('/path/to/project/vendors/webklex/laravel-pdfmerger/src/PDFMerger/examples/pdf_one.pdf', [2]);
+$oMerger->addPDF('/path/to/project/vendors/webklex/laravel-pdfmerger/src/PDFMerger/examples/pdf_two.pdf', 'all');
 
 $oMerger->merge();
 $oMerger->save('merged_result.pdf');
@@ -49,7 +49,7 @@ $oMerger->save('merged_result.pdf');
 ...add raw content data:
 
 ``` php
-$oMerger->addString(file_get_contents('/path/to/project/vendors/webklex/PDFMerger/src/PDFMerger/examples/pdf_two.pdf'), [1]);
+$oMerger->addString(file_get_contents('/path/to/project/vendors/webklex/laravel-pdfmerger/src/PDFMerger/examples/pdf_two.pdf'), [1]);
 
 ```
 
