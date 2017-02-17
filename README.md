@@ -68,16 +68,16 @@ If you discover any security related issues, please email github@webklex.com ins
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
 
-[ico-version]: https://img.shields.io/packagist/v/Webklex/PDFMerger.svg?style=flat-square
+[ico-version]: https://img.shields.io/packagist/v/Webklex/laravel-pdfmerger.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
 [ico-travis]: https://img.shields.io/travis/Webklex/translator/master.svg?style=flat-square
-[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/Webklex/PDFMerger.svg?style=flat-square
-[ico-code-quality]: https://img.shields.io/scrutinizer/g/Webklex/PDFMerger.svg?style=flat-square
-[ico-downloads]: https://img.shields.io/packagist/dt/Webklex/PDFMerger.svg?style=flat-square
+[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/Webklex/laravel-pdfmerger.svg?style=flat-square
+[ico-code-quality]: https://img.shields.io/scrutinizer/g/Webklex/laravel-pdfmerger.svg?style=flat-square
+[ico-downloads]: https://img.shields.io/packagist/dt/Webklex/laravel-pdfmerger.svg?style=flat-square
 
-[link-packagist]: https://packagist.org/packages/Webklex/PDFMerger
-[link-travis]: https://travis-ci.org/Webklex/PDFMerger
-[link-scrutinizer]: https://scrutinizer-ci.com/g/Webklex/PDFMerger/code-structure
-[link-code-quality]: https://scrutinizer-ci.com/g/Webklex/PDFMerger
-[link-downloads]: https://packagist.org/packages/Webklex/PDFMerger
+[link-packagist]: https://packagist.org/packages/Webklex/laravel-pdfmerger
+[link-travis]: https://travis-ci.org/Webklex/laravel-pdfmerger
+[link-scrutinizer]: https://scrutinizer-ci.com/g/Webklex/laravel-pdfmerger/code-structure
+[link-code-quality]: https://scrutinizer-ci.com/g/Webklex/laravel-pdfmerger
+[link-downloads]: https://packagist.org/packages/Webklex/laravel-pdfmerger
 [link-author]: https://github.com/webklex
