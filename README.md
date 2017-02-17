@@ -31,17 +31,59 @@ Add the service provider to the providers array in `config/app.php`.
 ```
 
 ## Usage
+A basic usage example:
 
 ``` php
 use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
 
-$oPDF = PDFMerger::init();
+$oMerger = PDFMerger::init();
 
-$oPDF->setFileName('example.pdf');
-$oPDF->addPDF('first_pdf.pdf', '1');
-$oPDF->addPDF('second_pdf.pdf', 'all');
-$oPDF->merge();
-$oPDF->save('/somewhere/merged_result.pdf');
+$oMerger->addPDF('/path/to/project/vendors/webklex/PDFMerger/src/PDFMerger/examples/pdf_one.pdf', [2]);
+$oMerger->addPDF('/path/to/project/vendors/webklex/PDFMerger/src/PDFMerger/examples/pdf_two.pdf', 'all');
+
+$oMerger->merge();
+$oMerger->save('merged_result.pdf');
+
+```
+
+...add raw content data:
+
+``` php
+$oMerger->addString(file_get_contents('/path/to/project/vendors/webklex/PDFMerger/src/PDFMerger/examples/pdf_two.pdf'), [1]);
+
+```
+
+...select the pages you want to merge:
+
+``` php
+$oMerger->addPDF($file, 'all');  //Add all pages
+$oMerger->addPDF($file, [1]);    //Add page one only
+$oMerger->addPDF($file, [2]);    //Add page two only
+$oMerger->addPDF($file, [1, 3]); //Add page one and three only
+
+```
+
+...stream the merged content:
+
+``` php
+$oMerger->stream();
+
+```
+...download the merged content:
+
+``` php
+$oMerger->download();
+
+```
+..get the raw content data:
+``` php
+echo $oMerger->output();
+
+```
+...set the filename if you don't want to do it later:
+
+``` php
+$oMerger->setFileName('example.pdf');
 
 ```
 
