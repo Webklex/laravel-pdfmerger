@@ -196,7 +196,7 @@ class PDFMerger {
         $oFPDI = $this->oFPDI;
 
         $this->aFiles->each(function($file) use($oFPDI, $orientation){
-            $file['orientation'] = !is_null($file['orientation'])?$orientation:$file['orientation'];
+            $file['orientation'] = is_null($file['orientation'])?$orientation:$file['orientation'];
             $count = $oFPDI->setSourceFile($file['name']);
             if ($file['pages'] == 'all') {
 
