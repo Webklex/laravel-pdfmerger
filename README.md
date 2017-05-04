@@ -63,7 +63,7 @@ $oMerger->addPDF($file, [1, 3]); //Add page one and three only
 
 ```
 
-...merge files together but add blank pages to support duplex printing
+...merge files together but add blank pages to support duplex printing:
 ```php
 $oMerger->duplexMerge();
 ```
