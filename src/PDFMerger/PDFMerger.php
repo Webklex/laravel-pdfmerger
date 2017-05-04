@@ -188,6 +188,22 @@ class PDFMerger {
      * @throws \Exception if there are now PDFs to merge
      */
     public function merge($orientation = 'P') {
+        $this->doMerge($orientation, false);
+    }
+
+    /**
+     * Merges your provided PDFs and adds blank pages between documents as needed to allow duplex printing
+     * @param string $orientation
+     *
+     * @return void
+     *
+     * @throws \Exception if there are now PDFs to merge
+     */
+    public function duplexMerge($orientation = 'P') {
+        $this->doMerge($orientation, true);
+    }
+
+    protected function doMerge($orientation, $duplexSafe) {
 
         if ($this->aFiles->count() == 0) {
             throw new \Exception("No PDFs to merge.");
@@ -195,7 +211,7 @@ class PDFMerger {
 
         $oFPDI = $this->oFPDI;
 
-        $this->aFiles->each(function($file) use($oFPDI, $orientation){
+        $this->aFiles->each(function($file) use($oFPDI, $orientation, $duplexSafe){
             $file['orientation'] = is_null($file['orientation'])?$orientation:$file['orientation'];
             $count = $oFPDI->setSourceFile($file['name']);
             if ($file['pages'] == 'all') {
@@ -217,6 +233,10 @@ class PDFMerger {
                     $oFPDI->AddPage($file['orientation'], [$size['w'], $size['h']]);
                     $oFPDI->useTemplate($template);
                 }
+            }
+
+            if ($duplexSafe && $oFPDI->page % 2) {
+                $oFPDI->AddPage($file['orientation'], [$size['w'], $size['h']]);
             }
         });
     }
