@@ -7,13 +7,20 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 ## [Unreleased]
 
 ### Added
- - Added `duplexMerge` to support duplex-safe merging
+ - NaN
+ 
+### Fixed 
+ - NaN
+ 
+## [1.1.0] (2018-05-29)
+
+### Added
+ - Added `duplexMerge` to support duplex-safe merging 
+
+### Fixed
+ - Basic PDF library changed
 
 ## [1.0.0] (2017-02-17)
 
 ### Added
 - new laravel-pdfmerger package
-
-
-[Unreleased]: https://github.com/Webklex/laravel-pdfmerger
-[1.0.0]: https://github.com/Webklex/laravel-pdfmerger/releases/tag/1.0.0
