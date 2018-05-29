@@ -21,7 +21,7 @@
     "require": {
         "php": ">=5.5.9",
         "illuminate/support": ">=5.0",
-        "itbz/fpdi": "^1.6"
+        "setasign/fpdi-fpdf": "^1.6"
     },
     "require-dev": {
         "phpunit/phpunit": "4.*",
