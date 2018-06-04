@@ -12,7 +12,7 @@
 
 namespace Webklex\PDFMerger;
 
-use fpdi\FPDI;
+use FPDI;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
 
