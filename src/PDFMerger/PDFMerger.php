@@ -108,7 +108,8 @@ class PDFMerger {
         $output = $this->output();
         return new Response($output, 200, [
             'Content-Type' => 'application/pdf',
-            'Content-Disposition' =>  'attachment; filename="' . $this->fileName . '"'
+            'Content-Disposition' =>  'attachment; filename="' . $this->fileName . '"',
+            'Content-Length' => strlen($output),
         ]);
     }
 
