@@ -12,6 +12,14 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 ### Fixed 
  - NaN
  
+## [1.2.0] (2021-10-21)
+
+### Fixed
+- Replace itbz (deprecated) with setasign #14 #15 (thanks @laraben)
+
+### Added
+- auto orientation #11 (thanks @laraben)
+ 
 ## [1.1.0] (2018-05-29)
 
 ### Added
