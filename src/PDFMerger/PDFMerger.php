@@ -16,6 +16,7 @@ use setasign\Fpdi\Fpdi as FPDI;
 use setasign\Fpdi\PdfParser\StreamReader;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class PDFMerger {
 
@@ -145,7 +146,7 @@ class PDFMerger {
      */
     public function addString($string, $pages = 'all', $orientation = null){
 
-        $filePath = storage_path('tmp/'.str_random(16).'.pdf');
+        $filePath = storage_path('tmp/'.Str::random(16).'.pdf');
         $this->oFilesystem->put($filePath, $string);
         $this->tmpFiles->push($filePath);
 
