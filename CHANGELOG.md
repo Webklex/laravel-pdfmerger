@@ -13,7 +13,7 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
  - NaN
 
  
-## [1.3.0] (2021-10-21)
+## [1.3.0] (2021-10-25)
 
 ### Fixed
 - String (and Array) Helper functions are now removed in Laravel #17 (thanks @warksit)
