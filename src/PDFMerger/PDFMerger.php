@@ -17,6 +17,7 @@ use setasign\Fpdi\PdfParser\StreamReader;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Illuminate\Http\Response;
 
 class PDFMerger {
 
@@ -104,7 +105,12 @@ class PDFMerger {
      * @return string
      */
     public function download(){
-        return $this->oFPDI->Output($this->fileName, 'D');
+        $output = $this->output();
+        return new Response($output, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' =>  'attachment; filename="' . $this->fileName . '"',
+            'Content-Length' => strlen($output),
+        ]);
     }
 
     /**
