@@ -12,6 +12,10 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 ### Fixed 
  - NaN
 
+## [1.3.1] (2022-09-14)
+
+### Fixed
+- Don't force portrait orientation during merge if not specified (thanks @Jason-Toh)
  
 ## [1.3.0] (2021-10-25)
 
