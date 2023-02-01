@@ -246,7 +246,7 @@ class PDFMerger {
                 }
             }
 
-            if ($duplexSafe && $oFPDI->page % 2) {
+            if ($duplexSafe && $oFPDI->PageNo() % 2) {
                 $oFPDI->AddPage($file['orientation'], [$size['width'], $size['height']]);
             }
         });
