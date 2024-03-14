@@ -45,6 +45,14 @@
     "extra": {
         "branch-alias": {
             "dev-master": "1.0-dev"
+        },
+        "laravel": {
+            "providers": [
+                "Webklex\\PDFMerger\\Providers\\PDFMergerServiceProvider"
+            ],
+            "aliases": {
+                "PDFMerger": "Webklex\\PDFMerger\\Facades\\PDFMergerFacade"
+            }
         }
     }
 }
