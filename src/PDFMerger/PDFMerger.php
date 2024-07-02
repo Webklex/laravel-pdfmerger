@@ -12,12 +12,14 @@
 
 namespace Webklex\PDFMerger;
 
+use Illuminate\Support\Carbon;
 use setasign\Fpdi\Fpdi as FPDI;
 use setasign\Fpdi\PdfParser\StreamReader;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
 
 class PDFMerger {
 
@@ -158,6 +160,38 @@ class PDFMerger {
         $this->tmpFiles->push($filePath);
 
         return $this->addPDF($filePath, $pages, $orientation);
+    }
+
+    /**
+     * Add a PDF from S3
+     *
+     * @param string $filePath
+     * @param string $pages
+     * @param string|null $orientation
+     * @param int $tempURLMinutes
+     *
+     * @return self
+     *
+     * @throws \Exception if the given pages aren't correct or the file cannot be located
+     */
+    public function addPDFFromS3($filePath, $pages = 'all', $orientation = null, $tempURLMinutes = 5) {
+        if (Storage::disk('s3')->exists($filePath)) {
+            if (!is_array($pages) && strtolower($pages) != 'all') {
+                throw new \Exception("Invalid format for pages: '$pages'");
+            }
+
+            $temporaryUrl = Storage::disk('s3')->temporaryUrl($filePath, Carbon::now()->addMinutes($tempURLMinutes));
+
+            $this->aFiles->push([
+                'name'  => $temporaryUrl,
+                'pages' => $pages,
+                'orientation' => $orientation
+            ]);
+        } else {
+            throw new \Exception("Could not locate PDF on '$filePath'");
+        }
+
+        return $this;
     }
 
     /**

@@ -53,6 +53,13 @@ $oMerger->addString(file_get_contents('/path/to/project/vendors/webklex/laravel-
 
 ```
 
+...add files from s3:
+
+``` php
+$oMerger->addPDFFromS3('/path/examples/pdf_two.pdf'), [1]);
+
+```
+
 ...select the pages you want to merge:
 
 ``` php
