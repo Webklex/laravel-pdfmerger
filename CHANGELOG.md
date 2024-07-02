@@ -12,6 +12,14 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 ### Fixed 
  - NaN
 
+## [1.3.2] (2024-07-02)
+
+### Added
+- Support Auto-Discovery #47 (thanks @hasanwijaya )
+
+### Fixed
+- No response being send on download #31 #32 (thanks @KreutzerCode)
+
 ## [1.3.1] (2022-09-14)
 
 ### Fixed
