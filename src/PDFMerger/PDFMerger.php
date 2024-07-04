@@ -146,32 +146,38 @@ class PDFMerger {
 
     /**
      * Set the final filename
+     *
      * @param string $string
      * @param mixed $pages
      * @param mixed $orientation
+     * @param array $parserParams Individual parameters passed to the parser instance. Can be used for the
+     *                            FPDI PDF-Parser to handle encrypted pdfs.
      *
      * @return string
      */
-    public function addString($string, $pages = 'all', $orientation = null){
+    public function addString($string, $pages = 'all', $orientation = null, $parserParams = []){
 
         $filePath = storage_path('tmp/'.Str::random(16).'.pdf');
         $this->oFilesystem->put($filePath, $string);
         $this->tmpFiles->push($filePath);
 
-        return $this->addPDF($filePath, $pages, $orientation);
+        return $this->addPDF($filePath, $pages, $orientation, $parserParams);
     }
 
     /**
      * Add a PDF for inclusion in the merge with a valid file path. Pages should be formatted: 1,3,6, 12-16.
+     *
      * @param string $filePath
      * @param string $pages
      * @param string $orientation
+     * @param array $parserParams Individual parameters passed to the parser instance. Can be used for the
+     *                            FPDI PDF-Parser to handle encrypted pdfs.
      *
      * @return self
      *
      * @throws \Exception if the given pages aren't correct
      */
-    public function addPDF($filePath, $pages = 'all', $orientation = null) {
+    public function addPDF($filePath, $pages = 'all', $orientation = null, $parserParams = []) {
         if (file_exists($filePath)) {
             if (!is_array($pages) && strtolower($pages) != 'all') {
                 throw new \Exception($filePath."'s pages could not be validated");
@@ -180,7 +186,8 @@ class PDFMerger {
             $this->aFiles->push([
                 'name'  => $filePath,
                 'pages' => $pages,
-                'orientation' => $orientation
+                'orientation' => $orientation,
+                'parserParams' => $parserParams
             ]);
         } else {
             throw new \Exception("Could not locate PDF on '$filePath'");
@@ -223,7 +230,10 @@ class PDFMerger {
 
         $this->aFiles->each(function($file) use($oFPDI, $orientation, $duplexSafe){
             $file['orientation'] = is_null($file['orientation'])?$orientation:$file['orientation'];
-            $count = $oFPDI->setSourceFile(StreamReader::createByString(file_get_contents($file['name'])));
+            $count = $oFPDI->setSourceFileWithParserParams(
+                StreamReader::createByString(file_get_contents($file['name'])),
+                $file['parserParams']
+            );
 
             if ($file['pages'] == 'all') {
 
