@@ -18,6 +18,7 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Illuminate\Http\Response;
+use setasign\Fpdi\PdfReader\PageBoundaries;
 
 class PDFMerger {
 
@@ -120,7 +121,7 @@ class PDFMerger {
      * @return string
      */
     public function save($filePath = null){
-        return $this->oFilesystem->put($filePath?$filePath:$this->fileName, $this->output());
+        return $this->oFilesystem->put($filePath?:$this->fileName, $this->output());
     }
 
     /**
@@ -227,7 +228,7 @@ class PDFMerger {
             if ($file['pages'] == 'all') {
 
                 for ($i = 1; $i <= $count; $i++) {
-                    $template   = $oFPDI->importPage($i);
+                    $template   = $oFPDI->importPage($i, PageBoundaries::CROP_BOX, true, true);
                     $size       = $oFPDI->getTemplateSize($template);
                     $autoOrientation = isset($file['orientation']) ? $file['orientation'] : $size['orientation'];
 
@@ -236,8 +237,10 @@ class PDFMerger {
                 }
             } else {
                 foreach ($file['pages'] as $page) {
-                    if (!$template = $oFPDI->importPage($page)) {
-                        throw new \Exception("Could not load page '$page' in PDF '" . $file['name'] . "'. Check that the page exists.");
+                    if (!$template = $oFPDI->importPage($page, PageBoundaries::CROP_BOX, true, true)) {
+                        throw new \Exception(
+                            "Could not load page '$page' in PDF '" . $file['name'] . "'. Check that the page exists."
+                        );
                     }
                     $size = $oFPDI->getTemplateSize($template);
                     $autoOrientation = isset($file['orientation']) ? $file['orientation'] : $size['orientation'];
@@ -247,7 +250,7 @@ class PDFMerger {
                 }
             }
 
-            if ($duplexSafe && $oFPDI->page % 2) {
+            if ($duplexSafe && $oFPDI->PageNo() % 2) {
                 $oFPDI->AddPage($file['orientation'], [$size['width'], $size['height']]);
             }
         });
