@@ -18,6 +18,7 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Illuminate\Http\Response;
+use setasign\Fpdi\PdfReader\PageBoundaries;
 
 class PDFMerger {
 
@@ -120,7 +121,7 @@ class PDFMerger {
      * @return string
      */
     public function save($filePath = null){
-        return $this->oFilesystem->put($filePath?$filePath:$this->fileName, $this->output());
+        return $this->oFilesystem->put($filePath?:$this->fileName, $this->output());
     }
 
     /**
@@ -145,32 +146,38 @@ class PDFMerger {
 
     /**
      * Set the final filename
+     *
      * @param string $string
      * @param mixed $pages
      * @param mixed $orientation
+     * @param array $parserParams Individual parameters passed to the parser instance. Can be used for the
+     *                            FPDI PDF-Parser to handle encrypted pdfs.
      *
      * @return string
      */
-    public function addString($string, $pages = 'all', $orientation = null){
+    public function addString($string, $pages = 'all', $orientation = null, $parserParams = []){
 
         $filePath = storage_path('tmp/'.Str::random(16).'.pdf');
         $this->oFilesystem->put($filePath, $string);
         $this->tmpFiles->push($filePath);
 
-        return $this->addPDF($filePath, $pages, $orientation);
+        return $this->addPDF($filePath, $pages, $orientation, $parserParams);
     }
 
     /**
      * Add a PDF for inclusion in the merge with a valid file path. Pages should be formatted: 1,3,6, 12-16.
+     *
      * @param string $filePath
      * @param string $pages
      * @param string $orientation
+     * @param array $parserParams Individual parameters passed to the parser instance. Can be used for the
+     *                            FPDI PDF-Parser to handle encrypted pdfs.
      *
      * @return self
      *
      * @throws \Exception if the given pages aren't correct
      */
-    public function addPDF($filePath, $pages = 'all', $orientation = null) {
+    public function addPDF($filePath, $pages = 'all', $orientation = null, $parserParams = []) {
         if (file_exists($filePath)) {
             if (!is_array($pages) && strtolower($pages) != 'all') {
                 throw new \Exception($filePath."'s pages could not be validated");
@@ -179,7 +186,8 @@ class PDFMerger {
             $this->aFiles->push([
                 'name'  => $filePath,
                 'pages' => $pages,
-                'orientation' => $orientation
+                'orientation' => $orientation,
+                'parserParams' => $parserParams
             ]);
         } else {
             throw new \Exception("Could not locate PDF on '$filePath'");
@@ -222,12 +230,15 @@ class PDFMerger {
 
         $this->aFiles->each(function($file) use($oFPDI, $orientation, $duplexSafe){
             $file['orientation'] = is_null($file['orientation'])?$orientation:$file['orientation'];
-            $count = $oFPDI->setSourceFile(StreamReader::createByString(file_get_contents($file['name'])));
+            $count = $oFPDI->setSourceFileWithParserParams(
+                StreamReader::createByString(file_get_contents($file['name'])),
+                $file['parserParams']
+            );
 
             if ($file['pages'] == 'all') {
 
                 for ($i = 1; $i <= $count; $i++) {
-                    $template   = $oFPDI->importPage($i);
+                    $template   = $oFPDI->importPage($i, PageBoundaries::CROP_BOX, true, true);
                     $size       = $oFPDI->getTemplateSize($template);
                     $autoOrientation = isset($file['orientation']) ? $file['orientation'] : $size['orientation'];
 
@@ -236,8 +247,10 @@ class PDFMerger {
                 }
             } else {
                 foreach ($file['pages'] as $page) {
-                    if (!$template = $oFPDI->importPage($page)) {
-                        throw new \Exception("Could not load page '$page' in PDF '" . $file['name'] . "'. Check that the page exists.");
+                    if (!$template = $oFPDI->importPage($page, PageBoundaries::CROP_BOX, true, true)) {
+                        throw new \Exception(
+                            "Could not load page '$page' in PDF '" . $file['name'] . "'. Check that the page exists."
+                        );
                     }
                     $size = $oFPDI->getTemplateSize($template);
                     $autoOrientation = isset($file['orientation']) ? $file['orientation'] : $size['orientation'];
@@ -247,7 +260,7 @@ class PDFMerger {
                 }
             }
 
-            if ($duplexSafe && $oFPDI->page % 2) {
+            if ($duplexSafe && $oFPDI->PageNo() % 2) {
                 $oFPDI->AddPage($file['orientation'], [$size['width'], $size['height']]);
             }
         });
