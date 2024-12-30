@@ -136,7 +136,7 @@ class PDFMerger {
      * Set the final filename
      * @param string $fileName
      *
-     * @return string
+     * @return self
      */
     public function setFileName($fileName){
         $this->fileName = $fileName;
@@ -144,12 +144,12 @@ class PDFMerger {
     }
 
     /**
-     * Set the final filename
+     * Add a string for inclusion in the merge
      * @param string $string
      * @param mixed $pages
      * @param mixed $orientation
      *
-     * @return string
+     * @return self
      */
     public function addString($string, $pages = 'all', $orientation = null){
 
@@ -221,7 +221,7 @@ class PDFMerger {
         $oFPDI = $this->oFPDI;
 
         $this->aFiles->each(function($file) use($oFPDI, $orientation, $duplexSafe){
-            $file['orientation'] = is_null($file['orientation'])?$orientation:$file['orientation'];
+            $file['orientation'] = $file['orientation'] ?? $orientation;
             $count = $oFPDI->setSourceFile(StreamReader::createByString(file_get_contents($file['name'])));
 
             if ($file['pages'] == 'all') {
@@ -229,7 +229,7 @@ class PDFMerger {
                 for ($i = 1; $i <= $count; $i++) {
                     $template   = $oFPDI->importPage($i);
                     $size       = $oFPDI->getTemplateSize($template);
-                    $autoOrientation = isset($file['orientation']) ? $file['orientation'] : $size['orientation'];
+                    $autoOrientation = $file['orientation'] ?? $size['orientation'];
 
                     $oFPDI->AddPage($autoOrientation, [$size['width'], $size['height']]);
                     $oFPDI->useTemplate($template);
@@ -240,7 +240,7 @@ class PDFMerger {
                         throw new \Exception("Could not load page '$page' in PDF '" . $file['name'] . "'. Check that the page exists.");
                     }
                     $size = $oFPDI->getTemplateSize($template);
-                    $autoOrientation = isset($file['orientation']) ? $file['orientation'] : $size['orientation'];
+                    $autoOrientation = $file['orientation'] ?? $size['orientation'];
 
                     $oFPDI->AddPage($autoOrientation, [$size['width'], $size['height']]);
                     $oFPDI->useTemplate($template);
